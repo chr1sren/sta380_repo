@@ -2,6 +2,7 @@
 \usepackage{enumitem}
 \usepackage[margin=1.2in]{geometry}
 \usepackage{titling}
+\usepackage{amsmath}
 
 \setlength{\droptitle}{-2cm}
 \setlength{\parindent}{0pt}
@@ -27,40 +28,80 @@
 
 \maketitle
 
-\section*{1. Project Topic}
-This project focuses on understanding how different statistical methods behave when the signal strength and distributional assumptions vary. Users will interactive exploration of feature relevance using permutation testing and bootstrap resampling under controlled data-generating processes.
+\section{Project Topic}
+% This project focuses on understanding how different statistical methods behave when the signal strength and distributional assumptions vary. Users will interactively explore the feature relevance using permutation testing and bootstrap resampling under controlled data-generating processes.
+This project develops a high-dimensional feature selection method that combines permutation testing and bootstrap stability analysis. 
+Users will interactively explore how the selected feature set changes as the signal strength, distributional shape, and noise level vary under controlled data-generating processes.
 
-\section*{2. Simulation vs. Dataset}
+\section{Simulation vs. Dataset}
 The project will rely on simulated datasets.
 
-\section*{3. Project Details}
-Data will be generated starting from samples drawn from a uniform distribution. For each feature, the data-generating process follows a mixture model:
-$$z(y) = \alpha \cdot g(y) + (1 - \alpha) \cdot h(y)$$
-Where:
+\section{Project Details}
+% Data will be generated starting from samples drawn from a uniform distribution. For each feature, the data-generating process follows a mixture model:
+% $$z(y) = \alpha \cdot g(y) + (1 - \alpha) \cdot h(y)$$
+% Where:
+% \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
+%     \item $\alpha$: Feature strength (signal level).
+%     \item $g(y)$: Distribution whose mean depends on the true label y and represents the informative signal.
+%     \item $h(y)$: Noise distribution with mean differs from y and represents irrelevant variation.
+% \end{itemize}
+
+% Also, users will be able to select different distributions for both g and h to investigate how assumptions about data generation influence statistical inference. But the parameter will be generated randomly. So the program know the correct relative features but user do not know.
+
+Let $n$ be the sample size and $p$ be the number of features. Let $Y_i \in \{0,1\}$ be the class label for sample $i=1,...,n$. Let $S\subset \{1,...,p\}$ be the set of truly relevant features, and $S^c$ its complement (irrelevant features). 
+
+For each feature $j$ and sample $i$, we generate the data $X_{ij}$ according to a mixture model:
+\[
+X_{ij} \sim 
+\begin{cases}
+\alpha \cdot g_{Y_i}(\theta_j) + (1-\alpha) h(\phi_j), & j\in S,\\
+h(\phi_j), & j\notin S.
+\end{cases}
+\]
+where:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item $\alpha$: Feature strength (signal level).
-    \item $g(y)$: Distribution whose mean depends on the true label y and represents the informative signal.
-    \item $h(y)$: Noise distribution with mean differs from y and represents irrelevant variation.
+    \item $\alpha \in [0,1]$ controls signal strength (for signal features only).
+    \item $g_{Y_i}(\theta_j)$ is a conditional distribution whose parameters (e.g., mean shift) depend on $Y_i$.
+    \item $h(\phi_j)$ is a noise distribution independent of $Y_i$, so the null features satisfy $X_{\cdot j} \perp Y$.
 \end{itemize}
 
-Also, users will be able to select different distributions for both g and h to investigate how assumptions about data generation influence statistical inference. But the parameter will be generated randomly. So the program know the correct relative features but user do not know.
+Users will be able to select different distributions for both $g$ and $h$ to investigate how assumptions about data generation influence statistical inference.
 
-Feature relevance will be evaluated using permutation testing:
+In each simulation run, the ground-truth signal set $S$ and the signal strength parameters $\theta_j$ (e.g., mean shifts) will be randomly generated and stored internally for evaluation, while users can only observe the dataset and the selected features.
+
+Feature relevance will be evaluated using permutation testing. For each feature:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item Users may choose among several test statistics.
-    \item A null distribution will be constructed by repeatedly permuting the labels.
+    \item Users may choose a test statistic $T$ among several test statistics (e.g., group means).
+    \item A null distribution will be constructed by repeatedly shuffling the labels and recomputing $T$ each time.
     \item p-values will be computed based on the permutation distribution.
+    \item Specifically, the permutation p-value is computed as:
+    \[
+    p = \frac{\# (\text{shuffled }T \geq \text{observed }T)}{\#\text{shuffles}}
+    \]
 \end{itemize}
 
-Bootstrap resampling will be used to study the stability of feature estimates:
+Bootstrap resampling will be used to quantify the stability of feature selection:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item Users may select descriptive statistics.
-    \item Bootstrap samples will be used to estimate variability and assess robustness across repeated resampling.
+    % \item Users may select descriptive statistics.
+    \item The dataset is bootstrapped by repeatedly sampling rows with replacement.
+    \item The feature selection process is run on each bootstrap sample.
+    \item The selection frequency of a feature is defined as:
+    \[
+    f_j=\frac{\#\text{times feature $j$ is selected}}{\#\text{bootstrap runs}}
+    \]
+    \item Features with high selection frequency are considered more stable, and users may filter features by setting a frequency threshold.
 \end{itemize}
 
 The overall goal is to allow users to explore how permutation tests and bootstrap methods respond to different data structures, including varying signal strength, distribution shapes, and noise levels.
 
-\section*{4. User Inputs (Shiny Components)}
+\section{Evaluation}
+Denote the ground truth set $S$ and the selected set $\hat{S}$. Since the ground truth is known in the simulation, we evaluate performance using:
+\begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
+    \item Empirical precision $= \dfrac{|\hat{S}\cap S|}{|\hat{S}|}$
+    \item Empirical recall $= \dfrac{|\hat{S}\cap S|}{|S|}$
+\end{itemize}
+
+\section{User Inputs (Shiny Components)}
 Users will be able to modify the following:
 \begin{enumerate}[itemsep=0pt, parsep=0pt, topsep=0pt]
     \item Choice of distributions for $g(y)$ and $h(y)$.
