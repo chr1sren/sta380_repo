@@ -48,21 +48,18 @@ The project will rely on simulated datasets.
 
 % Also, users will be able to select different distributions for both g and h to investigate how assumptions about data generation influence statistical inference. But the parameter will be generated randomly. So the program know the correct relative features but user do not know.
 
-Let $n$ be the sample size and $p$ be the number of features. Let $Y_i \in \{0,1\}$ be the class label for sample $i=1,...,n$. Let $S\subset \{1,...,p\}$ be the set of truly relevant features, and $S^c$ its complement (irrelevant features). 
+Let $n$ be the sample size and $p$ be the number of features. Let $Y_i \in \{0,1\}$ be the class label for sample $i=1,...,n$. Let $S\subset \{1,...,p\}$ be the set of truly relevant features. 
 
 For each feature $j$ and sample $i$, we generate the data $X_{ij}$ according to a mixture model:
 \[
 X_{ij} \sim 
-\begin{cases}
-\alpha \cdot g_{Y_i}(\theta_j) + (1-\alpha) h(\phi_j), & j\in S,\\
-h(\phi_j), & j\notin S.
-\end{cases}
+\alpha \cdot \mathcal{G}_{Y_i}(\theta_j) + (1-\alpha) \mathcal{H}(\phi_j)
 \]
 where:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item $\alpha \in [0,1]$ controls signal strength (for signal features only).
-    \item $g_{Y_i}(\theta_j)$ is a conditional distribution whose parameters (e.g., mean shift) depend on $Y_i$.
-    \item $h(\phi_j)$ is a noise distribution independent of $Y_i$, so the null features satisfy $X_{\cdot j} \perp Y$.
+    \item $\alpha \in [0,1]$ controls noise strength. When $\alpha=0$, $X_{ij}$ reduces to pure noise distribution, and is considered as an irrelevant feature.
+    \item $\mathcal{G}_{Y_i}(\theta_j)$ is a conditional distribution whose parameters (e.g., mean shift) depend on $Y_i$.
+    \item $\mathcal{H}(\phi_j)$ is a noise distribution independent of $Y_i$, so the null features satisfy $X_{\cdot j} \perp Y$.
 \end{itemize}
 
 Users will be able to select different distributions for both $g$ and $h$ to investigate how assumptions about data generation influence statistical inference.
@@ -104,7 +101,7 @@ Denote the ground truth set $S$ and the selected set $\hat{S}$. Since the ground
 \section{User Inputs (Shiny Components)}
 Users will be able to modify the following:
 \begin{enumerate}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item Choice of distributions for $g(y)$ and $h(y)$.
+    \item Choice of distributions for $\mathcal{G}_{Y_i}(\theta_j)$ and $\mathcal{H}(\phi_j)$.
     \item Sample size and number of features.
     \item Selection of permutation test statistic (mean difference, Kolmogorov–Smirnov statistic, or Cramér–von Mises statistic).
     \item Selection of bootstrap descriptive statistics (mean, median, standard error, bias).
