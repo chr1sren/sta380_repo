@@ -29,25 +29,12 @@
 \maketitle
 
 \section{Project Topic}
-% This project focuses on understanding how different statistical methods behave when the signal strength and distributional assumptions vary. Users will interactively explore the feature relevance using permutation testing and bootstrap resampling under controlled data-generating processes.
-This project develops a high-dimensional feature selection method that combines permutation testing and bootstrap stability analysis. 
-Users will interactively explore how the selected feature set changes as the signal strength, distributional shape, and noise level vary under controlled data-generating processes.
+This project develops a high-dimensional feature selection method with permutation testing and bootstrap stability analysis. Users will interactively explore how the selected features change as the signal strength, distributional shape, and noise level vary under controlled data-generating processes.
 
 \section{Simulation vs. Dataset}
 The project will rely on simulated datasets.
 
 \section{Project Details}
-% Data will be generated starting from samples drawn from a uniform distribution. For each feature, the data-generating process follows a mixture model:
-% $$z(y) = \alpha \cdot g(y) + (1 - \alpha) \cdot h(y)$$
-% Where:
-% \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-%     \item $\alpha$: Feature strength (signal level).
-%     \item $g(y)$: Distribution whose mean depends on the true label y and represents the informative signal.
-%     \item $h(y)$: Noise distribution with mean differs from y and represents irrelevant variation.
-% \end{itemize}
-
-% Also, users will be able to select different distributions for both g and h to investigate how assumptions about data generation influence statistical inference. But the parameter will be generated randomly. So the program know the correct relative features but user do not know.
-
 Let $n$ be the sample size and $p$ be the number of features. Let $Y_i \in \{0,1\}$ be the class label for sample $i=1,...,n$. Let $S\subset \{1,...,p\}$ be the set of truly relevant features. 
 
 For each feature $j$ and sample $i$, we generate the data $X_{ij}$ according to a mixture model:
@@ -57,21 +44,18 @@ X_{ij} \sim
 \]
 where:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item $\alpha \in [0,1]$ controls noise strength. When $\alpha=0$, $X_{ij}$ reduces to pure noise distribution, and is considered as an irrelevant feature.
+    \item $\alpha \in [0,1]$ controls noise strength. When $\alpha=0$, $X_{ij}$ becomes an irrelevant feature.
     \item $\mathcal{G}_{Y_i}(\theta_j)$ is a conditional distribution whose parameters (e.g., mean shift) depend on $Y_i$.
     \item $\mathcal{H}(\phi_j)$ is a noise distribution independent of $Y_i$, so the null features satisfy $X_{\cdot j} \perp Y$.
 \end{itemize}
 
-Users will be able to select different distributions for both $g$ and $h$ to investigate how assumptions about data generation influence statistical inference.
-
-In each simulation run, the ground-truth signal set $S$ and the signal strength parameters $\theta_j$ (e.g., mean shifts) will be randomly generated and stored internally for evaluation, while users can only observe the dataset and the selected features.
+Users will be able to select different distributions for both $\mathcal{G}$ and $\mathcal{H}$ to investigate how data distributions influence results. The ground-truth $S$ and parameters $\theta_j$ will be randomly generated and stored internally for evaluation, while users can only observe the dataset and the selected features.
 
 Feature relevance will be evaluated using permutation testing. For each feature:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    \item Users may choose a test statistic $T$ among several test statistics (e.g., group means).
+    \item Users may choose a test statistic $T$ among several test statistics (e.g., mean values).
     \item A null distribution will be constructed by repeatedly shuffling the labels and recomputing $T$ each time.
-    \item p-values will be computed based on the permutation distribution.
-    \item Specifically, the permutation p-value is computed as:
+    \item p-values will be computed based on the permutation distribution:
     \[
     p = \frac{\# (\text{shuffled }T \geq \text{observed }T)}{\#\text{shuffles}}
     \]
@@ -79,14 +63,11 @@ Feature relevance will be evaluated using permutation testing. For each feature:
 
 Bootstrap resampling will be used to quantify the stability of feature selection:
 \begin{itemize}[itemsep=0pt, parsep=0pt, topsep=0pt]
-    % \item Users may select descriptive statistics.
-    \item The dataset is bootstrapped by repeatedly sampling rows with replacement.
-    \item The feature selection process is run on each bootstrap sample.
-    \item The selection frequency of a feature is defined as:
+    \item Feature selection process is run repeatedly on each bootstrap sample with selection frequency:
     \[
     f_j=\frac{\#\text{times feature $j$ is selected}}{\#\text{bootstrap runs}}
     \]
-    \item Features with high selection frequency are considered more stable, and users may filter features by setting a frequency threshold.
+    \item Features with high selection frequency are more stable.
 \end{itemize}
 
 The overall goal is to allow users to explore how permutation tests and bootstrap methods respond to different data structures, including varying signal strength, distribution shapes, and noise levels.
