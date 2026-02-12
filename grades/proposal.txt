@@ -1,0 +1,14 @@
+You should be specific with what type of distribution the user can use for \mathcal{G} and \mathcal{H}.
+
+Your description of combining both permutation testing and bootstrap resampling is a bit complicated.
+
+Typically, permutation testing already incorporates some parts of random sampling, so the bootstrap resampling seems a bit redundant to quantify the stability. I think just doing the permutation itself is sufficient.
+
+I'm also not too sure if bootstrap descriptive statistics is necessary here; from what I understood, the main goal is really given a particular distribution for \mathcal{G} and \mathcal{H}, to see if certain explanatory variables are still useful. (If I completely misunderstood the idea, then this means the proposal is not clear enough.)
+
+I don't think the mean difference would be a permutation test statistic.
+
+rubric:
+bit unclear of the use of the bootsrap here for stability (-0.1)
+
+I am planning to apply bonus marks after the "Basic Implementation Check" checkpoint, because some students might be switching groups/topics/opting out. I have set a reminder to do this.
