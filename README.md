@@ -12,7 +12,6 @@ In your R terminal:
 library(testthat)
 source("R/data_simulation.R")
 source("R/permutation_test.R")
-source("R/bootstrap_stability.R")
 source("R/evaluation.R")
 testthat::test_dir("R/tests/testthat")
 ```
