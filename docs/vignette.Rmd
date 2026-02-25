@@ -17,10 +17,10 @@ knitr::opts_chunk$set(
   fig.width = 8,
   fig.height = 6
 )
-source("R/data_simulation.R")
-source("R/permutation_test.R")
-source("R/bootstrap_stability.R")
-source("R/evaluation.R")
+source("../R/data_simulation.R")
+source("../R/permutation_test.R")
+source("../R/bootstrap_stability.R")
+source("../R/evaluation.R")
 ```
 
 ## 0. Introduction
