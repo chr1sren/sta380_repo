@@ -1,30 +1,44 @@
 ---
-title: "High-Dimensional Feature Selection via Permutation Test and Bootstrap Stability Analysis"
-author: "Renfei Wu, Shiqi Tian, Chengxi Li, Liwen Yin"
-date: "`r Sys.Date()`"
+title: "Basic R Implementation Vignette"
+author: "Team Chou Why Did: Renfei Wu, Shiqi Tian, Chengxi Li, Liwen Yin"
 output: pdf_document
-bibliography: references.bib
+bibliography: docs/bibliography.bib
 nocite: "@*"
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  echo = TRUE,
+  collapse = TRUE,
+  comment = "#>",
+  message = FALSE,
+  warning = FALSE,
+  fig.width = 8,
+  fig.height = 6
+)
 source("R/data_simulation.R")
 source("R/permutation_test.R")
 source("R/bootstrap_stability.R")
 source("R/evaluation.R")
 ```
 
+## 0. Introduction
+
+The project contain 4 R files: 
+
+1. `data_simulation.R`
+2. `permutation_test.R`
+3. `bootstrap_stability.R`
+4. `evaluation.R`
+
+To run the entire project, execute each class in the order described above. The first R script is used to generate sample data. The second and third R scripts allow users to choose hyperparameters and perform statistical tests to identify important features. The final script evaluates the accuracy of their self-defined statistical method, for example by measuring how successfully it identifies the correct features.
+
 ## 1. Data Simulation
 
-### (1). `simulate_mixture_data()`
+### (1) `simulate_mixture_data()`
 
-This function generates a synthetic dataset for testing feature selection
-methods. It creates an $n \times p$ feature matrix X** and binary labels
-**Y**, where only `n_relevant` features are truly associated with Y —
-the rest are pure noise. The indices of the true relevant features are
-stored in **S**, which serves as ground truth for evaluation later [@R].
+This function generates a synthetic dataset for testing feature selection methods. It creates an $n \times p$ feature matrix X and binary labels Y, where only `n_relevant` features are truly associated with Y (the rest are pure noise). The indices of the true relevant features are stored in S, which serves as ground truth for evaluation later.
 ```{r}
 sim <- simulate_mixture_data(
   n          = 200,
@@ -33,47 +47,56 @@ sim <- simulate_mixture_data(
   alpha      = 0.7,
   dist_G     = "normal",
   dist_H     = "normal",
-  seed       = 123
+  seed       = 380
 )
-
-dim(sim$X)   # 200 x 50
-sort(sim$S)  # true relevant feature indices
-table(sim$Y) # class balance
-names(sim) 
-
 ```
 
-The dataset has 200 observations and 50 features, of which 10 are truly
-relevant. These indices in `sim$S` will be used as ground truth throughout
-the rest of this vignette.
+The upward example create a dataset which has 200 observations and 50 features, of which 10 are truly relevant. The signal strength is 10. The signal and noise distribution are all normal.
 
+Notice, the inputs has the following constrain:
 
+- For `alpha`, it should be in range $[0, 1]$
+- For `dist_G`, the valid inputs are
+  - "normal": mean shift by class
+  - "normal_scale": mean and scale differ by class
+- For `dist_H`, the valid inputs are
+  - "normal"
+  - "uniform"
 
+These indices in `sim$S` will be used as ground truth throughout the rest of the examples shown in this document.
+
+Here we will show some information for `sim`:
+
+```{r}
+names(sim)  # Class property
+```
+The detail descriptions for each property can be found in the corresponding R file's function header.
+```{r}
+dim(sim$X)  # Dimension
+sort(sim$S)  # True relevant feature indices
+table(sim$Y)  # Data for each class
+```
 
 
 ## 2. Permutation Testing
 
-### (1).`stat_mean_diff()`
+### (1) `stat_mean_diff()`
 
-This function computes the absolute difference between the group means
-of a single feature. A larger value indicates a stronger difference
-between the two classes. which is,
+This function computes the absolute difference between the group means of a single feature. A larger value indicates a stronger difference between the two classes. Which is:
 
 $$\text{stat} = |\bar{x}_1 - \bar{x}_0|$$
 ```{r}
-# get the most relevant feature
-stats        <- sapply(sim$S, function(j) stat_mean_diff(sim$X[, j], sim$Y))
-best_j       <- sim$S[which.max(stats)]
+# Get the most relevant feature
+stats <- sapply(sim$S, function(j) stat_mean_diff(sim$X[, j], sim$Y))
+best_j <- sim$S[which.max(stats)]
 
-x_relevant   <- sim$X[, best_j]  # most strongly relevant feature
-x_irrelevant <- sim$X[, setdiff(1:50, sim$S)[1]]   # returns all feature indices that are not contained in sim$S. Taking [1] selects the first of these indices.
+x_relevant <- sim$X[, best_j]  # most strongly relevant feature
+x_irrelevant <- sim$X[, setdiff(1:50, sim$S)[1]] # others
 
 stat_mean_diff(x_relevant, sim$Y)
 stat_mean_diff(x_irrelevant, sim$Y)
 
-
 # display plot
-
 boxplot(x_relevant ~ sim$Y,
         main = "Relevant Feature by Class",
         xlab = "Class",
@@ -95,12 +118,18 @@ The boxplots show that the relevant feature exhibits a clear separation between 
 
 
 
-### (2). `stat_ks()`
+### (2) `stat_ks()`
 
 This function computes the Kolmogorov-Smirnov statistic, which measures
 the maximum difference between the empirical distributions of a feature
 in class 0 and class 1. Unlike `stat_mean_diff()`, it captures
 differences in the overall shape of the distribution, not just the mean.
+
+Notice, the inputs has the following constrain:
+
+- `x` should be a numeric vector (a single feature).
+- `Y` should be binary class labels (0/1) with both classes present.
+
 ```{r}
 stat_ks(x_relevant, sim$Y)
 stat_ks(x_irrelevant, sim$Y)
@@ -111,12 +140,17 @@ greater distributional difference between the two classes.
 
 
 
-### (3). `stat_cvm()`
+### (3) `stat_cvm()`
 
 This function computes the Cramér-von Mises statistic, which measures
 the overall difference between two empirical distributions by summing
 the squared differences at all observed points. It is more sensitive
 to differences across the whole distribution compared to `stat_ks()` [@good2005permutation].
+
+Notice, the inputs has the following constrain:
+
+- `x` should be a numeric vector (a single feature).
+- `Y` should be binary class labels (0/1) with both classes present.
 
 ```{r}
 stat_cvm(x_relevant, sim$Y)
@@ -127,7 +161,7 @@ As expected, the relevant feature yields a larger statistic than the
 irrelevant feature.
 
 
-### (4). `permutation_pvalue_one()`
+### (4) `permutation_pvalue_one()`
 
 This function computes a permutation p-value for a single feature.
 It repeatedly shuffles the class labels **Y** and recomputes the test
@@ -135,6 +169,12 @@ statistic each time, building a null distribution. The p-value is the
 proportion of shuffles that produced a statistic as large as the
 observed one. A small p-value suggests the feature is truly associated
 with **Y**.
+
+Notice, the inputs has the following constrain:
+
+- `stat_fun` must be a function of the form `(x, Y) -> scalar` (e.g. `stat_mean_diff`).
+- `n_shuffles` controls Monte Carlo accuracy; larger values are slower but more stable.
+
 ```{r}
 set.seed(380)
 permutation_pvalue_one(x_relevant, sim$Y, 
@@ -150,11 +190,17 @@ The relevant feature gives a much smaller p-value than the irrelevant
 feature, indicating strong evidence of association with **Y**.
 
 
-### (5). `permutation_pvalues()`
+### (5) `permutation_pvalues()`
 
 This function applies `permutation_pvalue_one()` to every column of
 **X**, returning a vector of p-values of length $p$. This allows us
 to assess all features at once.
+
+Notice, the inputs has the following constrain:
+
+- `X` should be an \(n \times p\) numeric matrix.
+- `Y` should be length \(n\) with values 0/1.
+
 ```{r}
 set.seed(380)
 pvals <- permutation_pvalues(sim$X, sim$Y,
@@ -168,11 +214,16 @@ The function returns one p-value per feature. Features with small
 p-values are candidates for selection.
 
 
-### (6). `select_features_permutation()`
+### (6) `select_features_permutation()`
 
 This function selects features whose permutation p-value is at or below
 a chosen significance level `alpha_level`. It is the final step of the
 permutation testing pipeline.
+
+Notice, the inputs has the following constrain:
+
+- `alpha_level` should be in range \( (0, 1) \), typical values are 0.05 or 0.01.
+
 ```{r}
 set.seed(380)
 selected_perm <- select_features_permutation(
@@ -195,11 +246,13 @@ plot(pvals,
      pch  = 16,
      col  = ifelse(1:50 %in% sim$S, "salmon", "lightblue"))
 abline(h = 0.05, lty = 2)
-legend("topright",
+legend("topleft",
        legend = c("True signal", "Null", "alpha = 0.05"),
        col    = c("salmon", "lightblue", "black"),
        pch    = c(16, 16, NA),
-       lty    = c(NA, NA, 2))
+       lty    = c(NA, NA, 2),
+       inset = 0.02,
+       cex = 0.85)
 ```
 
 Features below the dashed line are selected. True signal features are
@@ -209,7 +262,7 @@ shown in red.
 
 ## 3. Bootstrap Stability
 
-### (1). `bootstrap_selection_frequency()`
+### (1) `bootstrap_selection_frequency()`
 
 A single permutation test can vary depending on the sample. This
 function runs the feature selection procedure across $B$ bootstrap
@@ -239,13 +292,19 @@ Features in the true signal set tend to have higher selection
 frequencies than noise features.
 
 
-### (2). `select_features_bootstrap()`
+### (2) `select_features_bootstrap()`
 
 This function selects features whose bootstrap selection frequency
 is at or above a `threshold`. Only features that are consistently
 selected across bootstrap resamples are retained, making the
 selection more stable. It also returns the full frequency vector
 as an attribute.
+
+Notice, the inputs has the following constrain:
+
+- `threshold` should be in range \( [0, 1] \). Larger values mean stricter selection.
+- `B` trades off stability vs runtime (more bootstraps = slower, smoother frequencies).
+
 ```{r}
 set.seed(380)
 selected_boot <- select_features_bootstrap(
@@ -270,7 +329,9 @@ barplot(attr(selected_boot, "frequency"),
 abline(h = 0.5, lty = 2)
 legend("topright",
        legend = c("True signal", "Null"),
-       fill   = c("salmon", "lightblue"))
+       fill   = c("salmon", "lightblue"),
+       inset   = 0.08,
+       cex     = 0.85)
 ```
 
 `r length(selected_boot)` features above the dashed line are selected. True signal features
@@ -278,33 +339,58 @@ are shown in red.
 
 ## 4. Evaluation
 
-### (1). `evaluate_precision_recall()`
+### (1) `evaluate_precision_recall()`
 
 This function compares the selected features against the true
 relevant set **S**. Precision measures how many selected features
 are truly relevant. Recall measures how many true relevant features
 were found.
-```{r}
-pr <- evaluate_precision_recall(
-  S_truth = sim$S,
-  S_hat   = selected_boot
-)
 
-pr$precision
-pr$recall
+In this section, we evaluate both the direct permutation selection and the
+bootstrap-stabilized selection, then visualize the trade-off.
+
+```{r}
+pr_perm <- evaluate_precision_recall(S_truth = sim$S, S_hat = selected_perm)
+pr_boot <- evaluate_precision_recall(S_truth = sim$S, S_hat = selected_boot)
+
+pr_perm$precision
+pr_perm$recall
+pr_boot$precision
+pr_boot$recall
 ```
 
 A higher precision means fewer false positives were selected. 
 A higher recall means more true relevant features were found.
 
-### (2). `f1_score()`
+We can also compare both methods in a single plot:
+
+```{r}
+mat <- rbind(
+  permutation = c(precision = pr_perm$precision, recall = pr_perm$recall),
+  bootstrap   = c(precision = pr_boot$precision, recall = pr_boot$recall)
+)
+barplot(
+  t(mat),
+  beside = TRUE,
+  col = c("#6699FF", "#05DEB2"),
+  ylim = c(0, 1),
+  ylab = "Score",
+  main = "Precision/Recall comparison"
+)
+legend("topright", legend = colnames(mat), fill = c("#6699FF", "#05DEB2"))
+```
+
+### (2) `f1_score()`
 
 The F1 score combines precision and recall into a single number.
 Both must be high for a good F1 score [@voss2013introduction].
 
 $$F1 = \frac{2 \times \text{precision} \times \text{recall}}{\text{precision} + \text{recall}}$$
 ```{r}
-f1_score(pr$precision, pr$recall)
+f1_perm <- f1_score(pr_perm$precision, pr_perm$recall)
+f1_boot <- f1_score(pr_boot$precision, pr_boot$recall)
+f1_perm
+f1_boot
 ```
 
 An F1 score closer to 1 indicates better overall feature selection
@@ -312,10 +398,12 @@ performance.
 
 ## Generative AI Statement
 
-Generative AI (Cursor) was used in this project to assist with two aspects: 
-(1) generating the plotting code for the visualizations in the vignette, and 
-(2) refining the written descriptions of each function to improve clarity 
-and structure. All code and descriptions were reviewed and verified by the author.
+ChatGPT was used in this project to assist with two aspects:
+
+- Generating the plotting code for the visualizations in the vignette, and
+- Find any grammar issue for the documentation.
+
+All code and descriptions were reviewed and verified by the author.
 
 ## Bibliography
 
