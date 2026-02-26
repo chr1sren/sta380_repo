@@ -21,5 +21,5 @@ if (requireNamespace("sta380project", quietly = TRUE)) {
     for (f in list.files(r_dir, pattern = "\\.R$", full.names = TRUE))
       source(f, local = .GlobalEnv)
   }
-  test_dir(file.path(pkg_root, "tests", "testthat"))
+  test_dir(file.path(r_dir, "tests", "testthat"))
 }
