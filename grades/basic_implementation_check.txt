@@ -1,0 +1,18 @@
+In terms of running tests:
+
+You really didn't need to do all of the fancy stuff you have in your testthat.R file (no idea where you got the idea from.)
+
+(from what I recall, the file gets auto-generated if you followed the instructions/example
+:https://github.com/annahuynhly/sta380package.example/blob/main/tests/testthat.R)
+
+As a result, you guys had a serious bug in the testthat.R file which I'm surprised no one caught!!
+(And I had to carefully look to debug.)
+
+For these things, I'd recommend trying to get a teammate to test out if the tests run correctly.
+
+The rest of the code and vignette seems reasonable, although I'd make it more clear as to what "true signal features" are (refer to the plot "Permutation p−values for all features". I know what they are, but I had to dig through the functions to understand what they were.)
+
+1.7/2
+
+Bonus marks, if applicable, will be added on Quercus (but not in terms of feedback.)
+
