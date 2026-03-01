@@ -34,3 +34,4 @@ test_that("f1_score harmonic mean when precision equals recall", {
 test_that("f1_score formula", {
   expect_equal(f1_score(0.8, 0.6), 2 * 0.8 * 0.6 / (0.8 + 0.6))
 })
+

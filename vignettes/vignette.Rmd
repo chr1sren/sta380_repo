@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
   fig.width = 8,
   fig.height = 6
 )
-source("../R/data_simulation.R")
-source("../R/permutation_test.R")
-source("../R/evaluation.R")
+library(sta380project)
 ```
 
 ## 0. Introduction
@@ -36,7 +34,8 @@ To run the entire project, execute each class in the order described above. The 
 
 ### (1) `simulate_mixture_data()`
 
-This function generates a synthetic dataset for testing feature selection methods. It creates an $n \times p$ feature matrix X and binary labels Y, where only `n_relevant` features are truly associated with Y (the rest are pure noise). The indices of the true relevant features are stored in S, which serves as ground truth for evaluation later.
+This function generates a synthetic dataset for testing feature selection methods. It creates an \(n \times p\) feature matrix X and binary labels Y, where only `n_relevant` features are truly associated with Y (the rest are pure noise). The indices of the true relevant features are stored in S, which serves as ground truth for evaluation later.
+
 ```{r}
 sim <- simulate_mixture_data(
   n          = 200,
@@ -53,7 +52,7 @@ The upward example create a dataset which has 200 observations and 50 features, 
 
 Notice, the inputs has the following constrain:
 
-- For `alpha`, it should be in range $[0, 1]$
+- For `alpha`, it should be in range \([0, 1]\)
 - For `dist_G`, the valid inputs are
   - "normal": mean shift by class
   - "normal_scale": mean and scale differ by class
@@ -140,7 +139,7 @@ greater distributional difference between the two classes.
 
 ### (3) `stat_cvm()`
 
-This function computes the Cramér-von Mises statistic, which measures
+This function computes the Cramér–von Mises statistic, which measures
 the overall difference between two empirical distributions by summing
 the squared differences at all observed points. It is more sensitive
 to differences across the whole distribution compared to `stat_ks()` [@good2005permutation].
@@ -191,7 +190,7 @@ feature, indicating strong evidence of association with **Y**.
 ### (5) `permutation_pvalues()`
 
 This function applies `permutation_pvalue_one()` to every column of
-**X**, returning a vector of p-values of length $p$. This allows us
+**X**, returning a vector of p-values of length \(p\). This allows us
 to assess all features at once.
 
 Notice, the inputs has the following constrain:
@@ -295,13 +294,14 @@ performance.
 
 ## Generative AI Statement
 
-ChatGPT was used in this project to assist with two aspects:
+For the Basic Implementation, ChatGPT was used to:
 
-- Generating the plotting code for the visualizations in the vignette, and
-- Find any grammar issue for the documentation.
+- Suggest plotting code for some of the visualizations in the vignette, and
+- Help identify and fix minor grammar issues in the documentation.
 
-All code and descriptions were reviewed and verified by the author.
+For the Package Compiling checkpoint, no AI is used.
+
+All code and descriptions were reviewed and veriefied by the author
 
 ## Bibliography
-
 

@@ -23,3 +23,4 @@ test_that("simulate_mixture_data works with dist_G and dist_H options", {
   expect_equal(dim(sim_n$X), c(20, 5))
   expect_equal(dim(sim_u$X), c(20, 5))
 })
+

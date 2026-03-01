@@ -43,3 +43,4 @@ test_that("select_features_permutation returns subset of 1:p", {
   sel <- select_features_permutation(sim$X, sim$Y, stat_ks, n_shuffles = 99, alpha_level = 0.10)
   expect_true(all(sel %in% seq_len(10)))
 })
+
