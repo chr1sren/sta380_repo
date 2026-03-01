@@ -4,6 +4,10 @@ author: "Team Chow Why Did: Renfei Wu, Shiqi Tian, Chengxi Li, Liwen Yin"
 output: pdf_document
 bibliography: bibliography.bib
 nocite: "@*"
+vignette: >
+  %\VignetteIndexEntry{Sta380project Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 

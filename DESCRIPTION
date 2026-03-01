@@ -1,12 +1,23 @@
 Package: sta380project
 Title: High-Dimensional Feature Selection via Permutation Test
-Version: 0.1.0
-Authors@R: person("Team", "Chou Why Did", email = "", role = c("aut", "cre"))
+Version: 0.1.1
+Authors@R: 
+    c(
+        person("Renfei", "Wu", , "chrisren.wu@mail.utoronto.ca", role = c("aut", "cre")),
+        person("Shiqi", "Tian", , "cheryl.tian@mail.utoronto.ca", role = "aut"),
+        person("Chengxi", "Li", , "chengxilii@outlook.com", role = "aut"),
+        person("Liwen", "Yin", , "yinliwen8787@gmail.com", role = "aut")
+    )
 Description: Permutation testing for feature selection on simulated mixture data (STA380 project).
 License: MIT
 Encoding: UTF-8
-Depends: R (>= 4.0.0)
+RoxygenNote: 7.3.2
+Depends: R (>= 4.0), 
 Imports: stats
-Suggests: testthat (>= 3.0.0)
+Suggests: 
+    testthat (>= 3.0.0),
+    rmarkdown,
+    knitr
 Config/testthat/edition: 3
-RoxygenNote: 7.3.3
+Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

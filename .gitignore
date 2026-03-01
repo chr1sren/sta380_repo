@@ -1,2 +1,6 @@
 /.Rlib
 man/
+.DS_Store
+/doc/
+/Meta/
+.Rbuildignore

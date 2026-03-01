@@ -8,41 +8,43 @@ Authors: Renfei Wu, Shiqi Tian, Chengxi Li, Liwen Yin
 ## Initialization
 
 Clone this repo to your machine. In RStudio:  
-File → New Project → Existing Directory → select this repo.
+File -> New Project -> Existing Directory -> select this repo.
 
-## Installation
+## Requirement
 
-Install required packages in your R console:
+Run the following to get `devtools` for your R
 ```r
-install.packages(c("testthat", "roxygen2", "rmarkdown"))
+install.packages("devtools")
 ```
 
-To render the vignette to PDF, install the following package in your R console:
+The following package is also required:
 ```r
-install.packages("tinytex")
-tinytex::install_tinytex()
+install.packages(c("testthat", "roxygen2", "rmarkdown", "knitr"))
 ```
+
+Finally, run the following to check your environment is ready or not
+```r
+devtools::check()
+```
+
+### Documents
+
+To render R Code's documentation, run in your terminal:
+```bash
+devtools::document()
+```
+`.Rd` file should be compiled in the `man/` folder
+
+To render the vignette to PDF, Run:
+```r
+devtools::build_vignettes()
+```
+pdf should be compiled in the `doc/` folder.
+
 
 ## Testing
   
 In your R console:
 ```r
-library(testthat)
-source("R/data_simulation.R")
-source("R/permutation_test.R")
-source("R/evaluation.R")
-testthat::test_dir("R/tests/testthat")
-```
-
-## Render Docs
-
-To render R Code's roxygen documentation, run in your terminal:
-```bash
-R -e 'roxygen2::roxygenise()'
-```
-
-To render Rmd vignette for R code
-In your terminal:
-```bash
-Rscript -e "rmarkdown::render('docs/vignette.Rmd')"
+devtools::test()
 ```
