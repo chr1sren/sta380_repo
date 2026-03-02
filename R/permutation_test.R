@@ -1,7 +1,7 @@
 #' Test statistic: absolute mean difference between groups.
 #'
 #' @description For a single feature vector x and binary labels Y, returns
-#'   |mean(x[Y==1]) - mean(x[Y==0])|.
+#'   |mean(x`[Y==1]`) - mean(x`[Y==0]`)|.
 #'
 #' @param x Numeric vector of feature values.
 #' @param Y Integer or numeric vector of class labels (0 and 1).

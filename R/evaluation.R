@@ -29,9 +29,9 @@ evaluate_precision_recall <- function(S_truth, S_hat) {
 #'
 #' @description F1 = 2 * precision * recall / (precision + recall), or 0 if both are 0.
 #'
-#' @param precision Scalar in [0, 1].
-#' @param recall Scalar in [0, 1].
-#' @return Scalar F1 in [0, 1].
+#' @param precision Scalar in `[0, 1]`.
+#' @param recall Scalar in `[0, 1]`.
+#' @return Scalar F1 in `[0, 1]`.
 #'
 #' @examples
 #' f1_score(0.8, 0.6)

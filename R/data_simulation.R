@@ -8,7 +8,7 @@
 #' @param n Sample size.
 #' @param p Number of features.
 #' @param n_relevant Number of truly relevant features (size of S). Must be <= p.
-#' @param alpha Signal strength in [0,1]. 
+#' @param alpha Signal strength in `[0,1]`. 
 #' @param dist_G Distribution name for the class-conditional part: "normal"
 #'   (mean shift by class) or "normal_scale" (mean and scale differ by class).
 #' @param dist_H Distribution name for the noise part: "normal" or "uniform".
