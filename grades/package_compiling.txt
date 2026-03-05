@@ -1,0 +1,28 @@
+Some of the notes you have are okay, while others you probably should have fixed.
+
+This notes is not of any concern:
+
+❯ checking for future file timestamps ... NOTE
+  unable to verify current time
+
+These notes you should be careful of:
+
+❯ checking DESCRIPTION meta-information ... NOTE
+  License components which are templates and need '+ file LICENSE':
+    MIT
+
+❯ checking top-level files ... NOTE
+  File
+    LICENSE
+  is not mentioned in the DESCRIPTION file.
+  Non-standard files/directories found at top level:
+    'doc' 'grades'
+
+❯ checking Rd files ... NOTE
+  checkRd: (-1) simulate_mixture_data.Rd:40: Lost braces; missing escapes or markup?
+      40 | X_ij ~ alpha * G_{Y_i}(theta_j) + (1 - alpha) * H(phi_j) for relevant
+         |                  ^
+
+Both notes regarding licenses are essentially the same, so I'm not going to double deduct for those. (-0.60)
+
+1.4/2
