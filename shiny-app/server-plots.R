@@ -12,7 +12,7 @@ sim_data_comp <- reactive({
     n = input$sample_size,
     p = input$num_features,
     n_relevant = input$num_relevant,
-    alpha = 0.8,
+    alpha = 0.8,  # TODO: do we need user input for this?
     seed = global_seed()
   )
 })
@@ -105,4 +105,31 @@ output$mean_diff_plot_overview <- renderPlot({
        under the Mean Difference statistic",
        pch = 19,
        col = ifelse(sim_data_comp()$Y == 1, "red", "blue"))
+})
+
+output$mean_diff_plot_pvalues <- renderPlot({
+  barplot(mean_diff_pval_comp(),
+          names.arg = 1:length(mean_diff_pval_comp()),
+          xlab = "Feature Index",
+          ylab = "Permutation p-value",
+          main = "Permutation p-values based on the Mean Difference statistic",
+          border = "black",
+          lwd = as.numeric(input$pvalue_bar_lwd))
+  abline(h = input$alpha_level, col = "red", lty = 2, lwd = 2)
+})
+
+output$mean_diff_plot_statistics <- renderPlot({
+  barplot(mean_diff_stat_comp(),
+          names.arg = 1:length(mean_diff_stat_comp()),
+          xlab = "Feature Index",
+          ylab = "Test Statistic",
+          main = "Feature-wise test statistics based on the Mean Difference statistic",
+          border = "black",
+          lwd = as.numeric(input$stat_bar_lwd))
+})
+
+output$mean_diff_table_selected <- renderTable({
+  data.frame(
+    Selected_Features = mean_diff_selected_comp()
+  )
 })
