@@ -6,7 +6,7 @@ global_seed <- reactive(input$example_seed)
 
 sim_data <- reactive({
   set.seed(global_seed())
-
+  
   simulate_mixture_data(
     n = input$sample_size,
     p = input$num_features,
@@ -108,12 +108,12 @@ evaluation_results <- reactive({
     "ks" = ks_selected(),
     "cvm" = cvm_selected()
   )
-
+  
   eval_obj <- evaluate_precision_recall(
     S_truth = sim_data()$S,
     S_hat = selected_features
   )
-
+  
   data.frame(
     Method = switch(
       input$stat_method_type,
@@ -124,7 +124,9 @@ evaluation_results <- reactive({
     Precision = round(eval_obj$precision, input$evaluation_digits),
     Recall = round(eval_obj$recall, input$evaluation_digits),
     F1 = round(f1_score(eval_obj$precision, eval_obj$recall),
-               input$evaluation_digits)
+               input$evaluation_digits),
+    Selected_Features = length(selected_features),
+    True_Relevant_Features = length(sim_data()$S)
   )
 })
 
@@ -135,7 +137,7 @@ evaluation_results <- reactive({
 output$mean_diff_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
   feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
-
+  
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
@@ -151,7 +153,7 @@ output$mean_diff_plot_overview <- renderPlot({
 output$ks_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
   feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
-
+  
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
@@ -167,7 +169,7 @@ output$ks_plot_overview <- renderPlot({
 output$cvm_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
   feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
-
+  
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
@@ -263,25 +265,25 @@ output$cvm_plot_statistics <- renderPlot({
 
 output$mean_diff_table_selected <- renderTable({
   selected_df <- data.frame(
-    Selected_Feature = mean_diff_selected()
+    Feature_Index = mean_diff_selected(),
+    P_Value = round(mean_diff_pvalues()[mean_diff_selected()], 4)
   )
-
   head(selected_df, input$selected_table_nrows)
 })
 
 output$ks_table_selected <- renderTable({
   selected_df <- data.frame(
-    Selected_Feature = ks_selected()
+    Feature_Index = ks_selected(),
+    P_Value = round(ks_pvalues()[ks_selected()], 4)
   )
-
   head(selected_df, input$selected_table_nrows)
 })
 
 output$cvm_table_selected <- renderTable({
   selected_df <- data.frame(
-    Selected_Feature = cvm_selected()
+    Feature_Index = cvm_selected(),
+    P_Value = round(cvm_pvalues()[cvm_selected()], 4)
   )
-
   head(selected_df, input$selected_table_nrows)
 })
 
@@ -290,5 +292,5 @@ output$cvm_table_selected <- renderTable({
 #####################################################
 
 output$evaluation_table <- renderTable({
-  evaluation_results()  # TODO: it doesn't show up
+  evaluation_results()
 })
