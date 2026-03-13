@@ -16,6 +16,18 @@ sim_data <- reactive({
   )
 })
 
+# Dynamically update selectors when num_features changes
+observe({
+  p <- input$num_features
+  choices <- as.character(seq_len(p))
+  updateSelectInput(session, "selected_feature_1",
+                    choices = choices, selected = "1")
+  updateSelectInput(session, "selected_feature_2",
+                    choices = choices, selected = as.character(min(2, p)))
+  updateSliderInput(session, "num_relevant",
+                    max = p)
+})
+
 #####################################################
 # Mean Difference                                   #
 #####################################################
@@ -294,3 +306,4 @@ output$cvm_table_selected <- renderTable({
 output$evaluation_table <- renderTable({
   evaluation_results()
 })
+
