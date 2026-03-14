@@ -165,9 +165,9 @@ output$mean_diff_plot_overview <- renderPlot({
        ylab = paste("Feature", feature_2),
        main = "Scatter plot of the simulated data",
        pch = 19,
-       cex.lab = 1.2,
-       cex.axis = 1,
-       cex.main = 1.2,
+       cex.lab = 0.8,
+       cex.axis = 0.8,
+       cex.main = 0.8,
        col = ifelse(sim_data()$Y == 0, "steelblue", "tomato"))
 
   legend("topright",
