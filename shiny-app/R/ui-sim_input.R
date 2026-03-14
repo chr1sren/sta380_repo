@@ -84,23 +84,23 @@ sim_graph_inputs <- div(
   #               min = 0, max = 5, value = 1, step = 0.5),
   # ), # end of conditionalPanel
 
-  # # Conditional panel for modifying the selected features table
-  # conditionalPanel(
-  #   condition = "input.graph_version == 'selected'",
+  # Conditional panel for modifying the selected features table
+  conditionalPanel(
+    condition = "input.graph_version == 'selected'",
 
-  #   numericInput(inputId = "selected_table_nrows",
-  #                label = "Insert the number of rows to display.",
-  #                value = 10,
-  #                min = 1),
-  # ), # end of conditionalPanel
+    numericInput(inputId = "selected_table_nrows",
+                 label = "Insert the number of rows to display.",
+                 value = 10,
+                 min = 1),
+  ), # end of conditionalPanel
 
-  # # Conditional panel for modifying the evaluation table
-  # conditionalPanel(
-  #   condition = "input.graph_version == 'evaluation'",
+  # Conditional panel for modifying the evaluation table
+  conditionalPanel(
+    condition = "input.graph_version == 'evaluation'",
 
-  #   numericInput(inputId = "evaluation_digits",
-  #                label = "Insert the number of digits to display.",
-  #                value = 3,
-  #                min = 1),
-  # ), # end of conditionalPanel
+    numericInput(inputId = "evaluation_digits",
+                 label = "Insert the number of digits to display.",
+                 value = 3,
+                 min = 1),
+  ), # end of conditionalPanel
 )

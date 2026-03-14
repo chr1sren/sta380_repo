@@ -133,10 +133,19 @@ evaluation_results <- reactive({
       "ks" = "KS",
       "cvm" = "CvM"
     ),
-    Precision = round(eval_obj$precision, input$evaluation_digits),
-    Recall = round(eval_obj$recall, input$evaluation_digits),
-    F1 = round(f1_score(eval_obj$precision, eval_obj$recall),
-               input$evaluation_digits),
+    Precision = format(
+      round(eval_obj$precision, input$evaluation_digits),
+      nsmall = input$evaluation_digits
+    ),
+    Recall = format(
+      round(eval_obj$recall, input$evaluation_digits),
+      nsmall = input$evaluation_digits
+    ),
+    F1 = format(
+      round(f1_score(eval_obj$precision, eval_obj$recall),
+            input$evaluation_digits),
+      nsmall = input$evaluation_digits
+    ),
     Selected_Features = length(selected_features),
     True_Relevant_Features = length(sim_data()$S)
   )
@@ -147,10 +156,10 @@ evaluation_results <- reactive({
 #####################################################
 
 output$mean_diff_plot_overview <- renderPlot({
+  par(bg = "white", fg = "black")
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
   feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
   
-  par(fg = "black", col.axis = "black", col.lab = "black", col.main = "black")
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
@@ -163,7 +172,7 @@ output$mean_diff_plot_overview <- renderPlot({
          pch = 19,
          text.col = "black",
          bg = "white")
-})
+}, bg = "white")
 
 output$ks_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
@@ -215,7 +224,7 @@ output$mean_diff_plot_pvalues <- renderPlot({
           ylab = "Permutation p-value",
           main = "Permutation p-values for all features",
           border = "black",
-          lwd = input$pvalue_bar_lwd,
+          # lwd = input$pvalue_bar_lwd,
           col = "lightblue")
   abline(h = input$alpha_level, col = "red", lty = 2, lwd = 2)
 })
@@ -228,7 +237,7 @@ output$ks_plot_pvalues <- renderPlot({
           ylab = "Permutation p-value",
           main = "Permutation p-values for all features",
           border = "black",
-          lwd = input$pvalue_bar_lwd,
+          # lwd = input$pvalue_bar_lwd,
           col = "lightblue")
   abline(h = input$alpha_level, col = "red", lty = 2, lwd = 2)
 })
@@ -241,7 +250,7 @@ output$cvm_plot_pvalues <- renderPlot({
           ylab = "Permutation p-value",
           main = "Permutation p-values for all features",
           border = "black",
-          lwd = input$pvalue_bar_lwd,
+          # lwd = input$pvalue_bar_lwd,
           col = "lightblue")
   abline(h = input$alpha_level, col = "red", lty = 2, lwd = 2)
 })
@@ -258,7 +267,7 @@ output$mean_diff_plot_statistics <- renderPlot({
           ylab = "Test Statistic",
           main = "Mean Difference statistics for all features",
           border = "black",
-          lwd = input$stat_bar_lwd,
+          # lwd = input$stat_bar_lwd,
           col = "lightgreen")
 })
 
@@ -270,7 +279,7 @@ output$ks_plot_statistics <- renderPlot({
           ylab = "Test Statistic",
           main = "KS statistics for all features",
           border = "black",
-          lwd = input$stat_bar_lwd,
+          # lwd = input$stat_bar_lwd,
           col = "lightgreen")
 })
 
@@ -282,7 +291,7 @@ output$cvm_plot_statistics <- renderPlot({
           ylab = "Test Statistic",
           main = "CvM statistics for all features",
           border = "black",
-          lwd = input$stat_bar_lwd,
+          # lwd = input$stat_bar_lwd,
           col = "lightgreen")
 })
 
