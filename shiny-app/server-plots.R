@@ -156,23 +156,22 @@ evaluation_results <- reactive({
 #####################################################
 
 output$mean_diff_plot_overview <- renderPlot({
-  par(bg = "white", fg = "black")
-  feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
-  feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
-  
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
        main = "Scatter plot of the simulated data",
        pch = 19,
+       cex.lab = 1.2,
+       cex.axis = 1,
+       cex.main = 1.2,
        col = ifelse(sim_data()$Y == 0, "steelblue", "tomato"))
+
   legend("topright",
          legend = c("Class 0", "Class 1"),
          col = c("steelblue", "tomato"),
          pch = 19,
-         text.col = "black",
-         bg = "white")
-}, bg = "white")
+         cex = 1.1)
+}, res = 120)
 
 output$ks_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
