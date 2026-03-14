@@ -154,8 +154,12 @@ evaluation_results <- reactive({
 #####################################################
 # Simulated Data Overview                           #
 #####################################################
-
+ 
 output$mean_diff_plot_overview <- renderPlot({
+  
+  feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
+  feature_2 <- min(as.numeric(input$selected_feature_2), input$num_features)
+ 
   plot(sim_data()$X[, feature_1], sim_data()$X[, feature_2],
        xlab = paste("Feature", feature_1),
        ylab = paste("Feature", feature_2),
@@ -171,7 +175,7 @@ output$mean_diff_plot_overview <- renderPlot({
          col = c("steelblue", "tomato"),
          pch = 19,
          cex = 1.1)
-}, res = 120)
+}, res = 120, execOnResize = TRUE)
 
 output$ks_plot_overview <- renderPlot({
   feature_1 <- min(as.numeric(input$selected_feature_1), input$num_features)
