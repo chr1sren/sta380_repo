@@ -65,41 +65,42 @@ sim_graph_inputs <- div(
                 selected = 2),
   ), # End conditionalPanel
 
-  # Conditional panel for modifying the permutation p-values plot
-  conditionalPanel(
-    condition = "input.graph_version == 'pvalues'",
+  ### doesn't make sense, commenting out for now
+  # # Conditional panel for modifying the permutation p-values plot
+  # conditionalPanel(
+  #   condition = "input.graph_version == 'pvalues'",
 
-    sliderInput(inputId = "pvalue_bar_lwd",
-                label = "Insert the bar border width.",
-                min = 0, max = 5, value = 1, step = 0.5),
-  ), # end of conditionalPanel
+  #   sliderInput(inputId = "pvalue_bar_lwd",
+  #               label = "Insert the bar border width.",
+  #               min = 0, max = 5, value = 1, step = 0.5),
+  # ), # end of conditionalPanel
 
-  # Conditional panel for modifying the test statistics plot
-  conditionalPanel(
-    condition = "input.graph_version == 'statistics'",
+  # # Conditional panel for modifying the test statistics plot
+  # conditionalPanel(
+  #   condition = "input.graph_version == 'statistics'",
 
-    sliderInput(inputId = "stat_bar_lwd",
-                label = "Insert the bar border width.",
-                min = 0, max = 5, value = 1, step = 0.5),
-  ), # end of conditionalPanel
+  #   sliderInput(inputId = "stat_bar_lwd",
+  #               label = "Insert the bar border width.",
+  #               min = 0, max = 5, value = 1, step = 0.5),
+  # ), # end of conditionalPanel
 
-  # Conditional panel for modifying the selected features table
-  conditionalPanel(
-    condition = "input.graph_version == 'selected'",
+  # # Conditional panel for modifying the selected features table
+  # conditionalPanel(
+  #   condition = "input.graph_version == 'selected'",
 
-    numericInput(inputId = "selected_table_nrows",
-                 label = "Insert the number of rows to display.",
-                 value = 10,
-                 min = 1),
-  ), # end of conditionalPanel
+  #   numericInput(inputId = "selected_table_nrows",
+  #                label = "Insert the number of rows to display.",
+  #                value = 10,
+  #                min = 1),
+  # ), # end of conditionalPanel
 
-  # Conditional panel for modifying the evaluation table
-  conditionalPanel(
-    condition = "input.graph_version == 'evaluation'",
+  # # Conditional panel for modifying the evaluation table
+  # conditionalPanel(
+  #   condition = "input.graph_version == 'evaluation'",
 
-    numericInput(inputId = "evaluation_digits",
-                 label = "Insert the number of digits to display.",
-                 value = 3,
-                 min = 1),
-  ), # end of conditionalPanel
+  #   numericInput(inputId = "evaluation_digits",
+  #                label = "Insert the number of digits to display.",
+  #                value = 3,
+  #                min = 1),
+  # ), # end of conditionalPanel
 )
