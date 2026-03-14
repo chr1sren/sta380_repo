@@ -1,0 +1,14 @@
+Some concerns:
+
+1. The website in its current form actually does not seem to really support the different types of test statistics; for instance, the plot generally looks same across all 3 options. Also, generally I do not think scatterplots are the best way to represent whatever you're trying to convey.
+
+2. I probably should've caught this sooner; the mean difference, at least how you have currently coded it, is not a test statistic. It is a statistic, but you did not reference back to the distribution of mean(x1) - mean(x2). I think your current working copy of the other two test statistics are fine, and so I would say it would be best if you just removed the mean difference from the permutation test. (Also, generally if you wanted to do a hypothesis test of the difference, you should just do ordinary monte carlo hypothesis testing instead of doing a permutation test.)
+
+3. The options, i.e., "number of features p" and "number of true relevant features" is not clear on the website and neither is it obvious the actual application of your website. This should be made more clear somewhere, i.e., you likely need to have a detailed description of the objective here and what the user wants to see.
+The title, at least in my notes is "High-dimensional feature selection via permutation test and bootstrap stability analysis" but I do not generally get the vibe of this analysis from your website.
+
+Generally, the format of your website is a bit too similar to the example. This is not necessarily bad; however, there is a part in the final rubric that is reflective of students doing something different or innovative so you may not get full marks if you do not incorporate something a bit original.
+
+Right now, it seems like most members have an adequate amount of commits so I'm not too concerned about group fairness.
+
+1/1
