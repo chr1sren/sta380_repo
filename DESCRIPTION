@@ -9,7 +9,7 @@ Authors@R:
         person("Liwen", "Yin", , "yinliwen8787@gmail.com", role = "aut")
     )
 Description: Permutation testing for feature selection on simulated mixture data (STA380 project).
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.3
 Depends: R (>= 4.0)

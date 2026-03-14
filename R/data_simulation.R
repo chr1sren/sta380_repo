@@ -1,7 +1,7 @@
 #' Simulate high dimensional data from a mixture model.
 #'
 #' @description Generates an n x p matrix X and length-n class labels Y from
-#'   X_ij ~ alpha * G_{Y_i}(theta_j) + (1 - alpha) * H(phi_j) for relevant
+#'   \eqn{X_{ij} \sim \alpha G_{Y_i}(\theta_j) + (1 - \alpha) H(\phi_j)} for relevant
 #'   features j in S; for j not in S, X_ij ~ H(phi_j). Ground truth S and
 #'   parameters are stored for evaluation.
 #'

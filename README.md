@@ -5,46 +5,30 @@ Team name: Chou Why did
 
 Authors: Renfei Wu, Shiqi Tian, Chengxi Li, Liwen Yin
 
-## Initialization
+## Installation
 
-Clone this repo to your machine. In RStudio:  
-File -> New Project -> Existing Directory -> select this repo.
+You can download the contents of this `R` package using
 
-## Requirement
-
-Run the following to get `devtools` for your R
-```r
-install.packages("devtools")
+```R
+remotes::install_github("https://github.com/chr1sren/sta380_repo")
 ```
 
-The following package is also required:
-```r
-install.packages(c("testthat", "roxygen2", "rmarkdown", "knitr"))
-```
-
-Finally, run the following to check your environment is ready or not
-```r
+Check dependency if you are in the repo root:
+```R
 devtools::check()
 ```
 
-### Documents
+## Demo
 
-To render R Code's documentation, run in your terminal:
-```bash
-devtools::document()
-```
-`.Rd` file should be compiled in the `man/` folder
+Demo website link: https://chr1sren-sta380-repo.share.connect.posit.cloud/
 
-To render the vignette to PDF, Run:
-```r
-devtools::build_vignettes()
-```
-pdf should be compiled in the `doc/` folder.
+## AI Declaration
 
+For the Basic Implementation, ChatGPT was used to:
 
-## Testing
-  
-In your R console:
-```r
-devtools::test()
-```
+- Suggest plotting code for some of the visualizations in the vignette, and
+- Help identify and fix minor grammar issues in the documentation.
+
+For the Package Compiling and Website Prototype checkpoint, no AI is used.
+
+All code and descriptions were reviewed and veriefied by the author
